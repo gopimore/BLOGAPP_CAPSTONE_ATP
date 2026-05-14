@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
-
+const BASE_URL = import.meta.env.VITE_API_URL;
 export const useAuth = create(
   persist(
     (set, get) => ({
@@ -17,7 +17,7 @@ export const useAuth = create(
 
           // make api call
           let res = await axios.post(
-            "http://localhost:4000/common-api/login",
+            `${BASE_URL}/common-api/login`,
             userCred,
             { withCredentials: true }
           );
@@ -51,7 +51,7 @@ export const useAuth = create(
 
         try {
           set({ loading: true });
-          const res = await axios.get("http://localhost:4000/common-api/me", { withCredentials: true });
+          const res = await axios.get(`${BASE_URL}/common-api/me`, { withCredentials: true });
           set({
             loading: false,
             isAuthenticated: true,
@@ -74,7 +74,7 @@ export const useAuth = create(
 
           // make api call
           await axios.get(
-            "http://localhost:4000/common-api/logout", { withCredentials: true }
+            `${BASE_URL}/common-api/logout`, { withCredentials: true }
           );
 
           // clear state

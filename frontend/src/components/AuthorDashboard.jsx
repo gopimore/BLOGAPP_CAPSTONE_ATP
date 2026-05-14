@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function AuthorDashboard() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const {
     currentUser,
     logout,
@@ -43,7 +44,7 @@ function AuthorDashboard() {
 
     try {
       const res = await axios.get(
-        `http://localhost:4000/author-api/articles/${currentUser._id}`,
+        `${BASE_URL}/author-api/articles/${currentUser._id}`,
         {
           withCredentials: true,
         }
@@ -57,7 +58,7 @@ function AuthorDashboard() {
         "Unable to load your articles"
       );
     }
-  }, [currentUser]);
+  }, [currentUser, BASE_URL]);
 
   // Authentication
   useEffect(() => {
@@ -96,7 +97,7 @@ function AuthorDashboard() {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/author-api/articles",
+        `${BASE_URL}/author-api/articles`,
         {
           author: currentUser._id,
           title: form.title,
@@ -144,7 +145,7 @@ function AuthorDashboard() {
       const nextState = !currentState;
 
       await axios.patch(
-        `http://localhost:4000/author-api/articles/${articleId}/status`,
+        `${BASE_URL}/author-api/articles/${articleId}/status`,
         {
           isArticleActive: nextState,
         },
@@ -228,7 +229,7 @@ function AuthorDashboard() {
 
     try {
       const res = await axios.put(
-        "http://localhost:4000/author-api/articles",
+        `${BASE_URL}/author-api/articles`,
         {
           articleId,
           title: updatedData.title,
@@ -268,7 +269,7 @@ function AuthorDashboard() {
   ) => {
     try {
       const res = await axios.patch(
-        `http://localhost:4000/author-api/articles/${articleId}/restore`,
+        `${BASE_URL}/author-api/articles/${articleId}/restore`,
         {},
         {
           withCredentials: true,
@@ -307,7 +308,7 @@ function AuthorDashboard() {
 
     try {
       await axios.patch(
-        `http://localhost:4000/author-api/articles/${articleId}/delete`,
+        `${BASE_URL}/author-api/articles/${articleId}/delete`,
         {},
         {
           withCredentials: true,

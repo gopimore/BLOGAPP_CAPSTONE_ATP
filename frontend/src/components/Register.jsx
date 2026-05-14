@@ -5,6 +5,8 @@ import { useAuth } from "../store/authStore";
 import axios from "axios";
 
 function Register() {
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const {
     register,
     handleSubmit,
@@ -12,7 +14,6 @@ function Register() {
   } = useForm();
 
   const { logout, isAuthenticated } = useAuth();
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -43,7 +44,7 @@ function Register() {
 
       if (role === "user") {
         let resObj = await axios.post(
-          "http://localhost:4000/user-api/users",
+          `${BASE_URL}/user-api/users`,
           formData
         );
 
@@ -52,7 +53,7 @@ function Register() {
         }
       } else if (role === "author") {
         let resObj = await axios.post(
-          "http://localhost:4000/author-api/users",
+          `${BASE_URL}/author-api/users`,
           formData
         );
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 function EditArticle() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function EditArticle() {
 
     try {
       await axios.put(
-        "http://localhost:4000/author-api/articles",
+        `${BASE_URL}/author-api/articles`,
         {
           articleId: article._id,
           title: data.title,

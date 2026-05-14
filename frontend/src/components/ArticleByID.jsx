@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 function ArticleByID() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
 
   const location = useLocation();
@@ -32,7 +33,7 @@ function ArticleByID() {
 
       try {
         const res = await axios.get(
-          `http://localhost:4000/user-api/article/${id}`,
+          `${BASE_URL}/user-api/article/${id}`,
           {
             withCredentials: true,
           }
@@ -47,7 +48,7 @@ function ArticleByID() {
     };
 
     getArticle();
-  }, [id, article]);
+  }, [id, article, BASE_URL]);
 
   // Format Date
   const formatDate = (date) => {
@@ -62,7 +63,7 @@ function ArticleByID() {
   const deleteArticle = async () => {
     try {
       await axios.delete(
-        `http://localhost:4000/author-api/article/${id}`,
+        `${BASE_URL}/author-api/article/${id}`,
         {
           withCredentials: true,
         }
@@ -87,7 +88,7 @@ function ArticleByID() {
   const addComment = async (commentObj) => {
     try {
       const res = await axios.post(
-        `http://localhost:4000/user-api/comment/${id}`,
+        `${BASE_URL}/user-api/comment/${id}`,
         commentObj,
         {
           withCredentials: true,

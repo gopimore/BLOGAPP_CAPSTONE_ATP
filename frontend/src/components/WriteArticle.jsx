@@ -17,6 +17,8 @@ import {
 import { useAuth } from "../store/authStore";
 
 function WriteArticle() {
+const BASE_URL = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const currentUser=useAuth(state=>state.currentUser)
@@ -35,7 +37,7 @@ function WriteArticle() {
     articleObj.author=currentUser._id;
     try {
       await axios.post(
-        "http://localhost:4000/author-api/articles",
+        `${BASE_URL}/author-api/articles`,
         articleObj,
         { withCredentials: true }
       );

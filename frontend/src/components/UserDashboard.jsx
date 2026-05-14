@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useAuth } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function UserDashboard() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const { currentUser, logout, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
@@ -14,18 +15,10 @@ function UserDashboard() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [loadingArticles, setLoadingArticles] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    fetchArticles();
-  }, [isAuthenticated, navigate]);
-
-  const fetchArticles = async () => {
+  const fetchArticles = useCallback(async () => {
     setLoadingArticles(true);
     try {
-      const res = await axios.get("http://localhost:4000/user-api/articles", {
+      const res = await axios.get(`${BASE_URL}/user-api/articles`, {
         withCredentials: true,
       });
       const articles = res.data.payload;
@@ -46,7 +39,15 @@ function UserDashboard() {
     } finally {
       setLoadingArticles(false);
     }
-  };
+  }, [BASE_URL]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    fetchArticles();
+  }, [isAuthenticated, navigate, fetchArticles]);
 
   const addComment = async (articleId) => {
     if (!commentText.trim()) {
@@ -60,7 +61,7 @@ function UserDashboard() {
     };
 
     try {
-      const res = await axios.put("http://localhost:4000/user-api/articles", body, {
+      const res = await axios.put(`${BASE_URL}/user-api/articles`, body, {
         withCredentials: true,
       });
       setArticles((prev) =>

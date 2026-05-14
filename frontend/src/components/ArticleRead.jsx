@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 function ArticleRead() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function ArticleRead() {
     const fetchArticle = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:4000/user-api/articles/${id}`,
+          `${BASE_URL}/user-api/articles/${id}`,
           {
             withCredentials: true,
           }
@@ -53,7 +54,7 @@ function ArticleRead() {
     };
 
     fetchArticle();
-  }, [id, navigate]);
+  }, [id, navigate, BASE_URL]);
 
   // Like & Rating State
   useEffect(() => {
@@ -83,7 +84,7 @@ function ArticleRead() {
 
     try {
       const res = await axios.patch(
-        `http://localhost:4000/user-api/articles/${id}/like`,
+        `${BASE_URL}/user-api/articles/${id}/like`,
         {},
         {
           withCredentials: true,
@@ -114,7 +115,7 @@ function ArticleRead() {
 
     try {
       const res = await axios.patch(
-        `http://localhost:4000/user-api/articles/${id}/rate`,
+        `${BASE_URL}/user-api/articles/${id}/rate`,
         { value },
         {
           withCredentials: true,
@@ -150,7 +151,7 @@ function ArticleRead() {
 
     try {
       const res = await axios.put(
-        "http://localhost:4000/user-api/articles",
+        `${BASE_URL}/user-api/articles`,
         {
           user: currentUser._id,
           articleId: id,

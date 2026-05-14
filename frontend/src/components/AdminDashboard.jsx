@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 function AdminDashboard() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const { currentUser, logout, isAuthenticated, loading } =
     useAuth();
 
@@ -21,6 +22,27 @@ function AdminDashboard() {
     }
   }, [isAuthenticated, loading, navigate]);
 
+  // Fetch Users
+  const fetchUsers = useCallback(async () => {
+    try {
+      setLoadingUsers(true);
+
+      const response = await axios.get(
+        `${BASE_URL}/admin-api/users`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setUsers(response.data.payload);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load users");
+    } finally {
+      setLoadingUsers(false);
+    }
+  }, [BASE_URL]);
+
   // Admin Check
   useEffect(() => {
     if (
@@ -36,28 +58,7 @@ function AdminDashboard() {
     ) {
       navigate("/unauthorized");
     }
-  }, [isAuthenticated, currentUser, loading, navigate]);
-
-  // Fetch Users
-  const fetchUsers = async () => {
-    try {
-      setLoadingUsers(true);
-
-      const response = await axios.get(
-        "http://localhost:4000/admin-api/users",
-        {
-          withCredentials: true,
-        }
-      );
-
-      setUsers(response.data.payload);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load users");
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
+  }, [isAuthenticated, currentUser, loading, navigate, fetchUsers]);
 
   // Block/Unblock
   const toggleBlockUser = async (
@@ -72,7 +73,7 @@ function AdminDashboard() {
         : "block";
 
       await axios.put(
-        `http://localhost:4000/admin-api/${action}/${userId}`,
+        `${BASE_URL}/admin-api/${action}/${userId}`,
         {},
         {
           withCredentials: true,
@@ -109,7 +110,7 @@ function AdminDashboard() {
       setActionLoading(userId);
 
       await axios.delete(
-        `http://localhost:4000/admin-api/users/${userId}`,
+        `${BASE_URL}/admin-api/users/${userId}`,
         {
           withCredentials: true,
         }

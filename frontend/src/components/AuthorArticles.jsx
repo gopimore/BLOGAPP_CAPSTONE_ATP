@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../store/authStore";
 import toast from "react-hot-toast";
 
 function AuthorArticles() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const { authorId } = useParams();
   const navigate = useNavigate();
   const { currentUser, isAuthenticated } = useAuth();
@@ -12,16 +13,11 @@ function AuthorArticles() {
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    fetchAuthorArticles();
-  }, [isAuthenticated, authorId]);
-
-  const fetchAuthorArticles = async () => {
+  const fetchAuthorArticles = useCallback(async () => {
     setLoading(true);
 
     try {
-      const res = await axios.get("http://localhost:4000/user-api/articles", {
+      const res = await axios.get(`${BASE_URL}/user-api/articles`, {
         withCredentials: true,
       });
       const allArticles = res.data.payload;
@@ -34,7 +30,12 @@ function AuthorArticles() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [BASE_URL, authorId]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    fetchAuthorArticles();
+  }, [isAuthenticated, fetchAuthorArticles]);
 
   if (!currentUser) {
     return <div>Loading...</div>;
