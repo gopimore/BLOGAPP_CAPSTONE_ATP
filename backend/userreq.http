@@ -1,0 +1,76 @@
+### creating user
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+    "firstName": "gopi",
+    "lastName": "more",
+    "email": "gopim@gmail.com",
+    "password": "User@12345",
+    "profileImageUrl": "https://example.com/avatars/author.png"
+}
+
+### User Register
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+  "firstName": "test",
+  "lastName": "test",
+  "email": "test@example.com",
+  "password": "test",
+  "profileImageUrl": "https://example.com/avatars/user.png"
+}
+
+
+### authenticating user // user login 
+POST http://localhost:4000/common-api/authenticate
+Content-Type: application/json
+
+{
+    "email": "gopimore@gmail.com",
+    "password": "User@12345",
+    "role":"USER"
+}
+
+### User Login
+POST http://localhost:4000/common-api/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "test1"
+ 
+}
+
+
+### Read articles of all authors by User
+GET http://localhost:4000/user-api/articles
+
+
+
+### add comment to an article by author
+PUT http://localhost:4000/user-api/articles
+Content-Type: application/json  
+
+{
+    "user":"69ae85a9ac6d1a407d608413",
+    "articleId":"698a90a64ba0b500522dd8c1",
+    "comment":"good article"
+}
+
+
+
+
+
+
+
+
+### comment
+PUT http://localhost:4000/user-api/articles/6989b0fc39eac380d1679991
+Content-Type: application/json
+
+{
+    "author":"698a90354ba0b500522dd8bc",
+    "comment":"good"
+}
