@@ -13,7 +13,7 @@ config(); //process.env
 //Create express application
 const app = exp();
 //use cors middleware
-app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177", "http://localhost:5178", "http://localhost:5179", "http://localhost:5180"],credentials:true}));
+app.use(cors({ origin: "https://blogappcapstoneatp.vercel.app", credentials:true }));
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
