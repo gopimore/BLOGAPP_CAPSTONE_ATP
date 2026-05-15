@@ -4,7 +4,7 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_URL;
 export const useAuth = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       currentUser: null,
       loading: false,
       isAuthenticated: false,
@@ -44,11 +44,6 @@ export const useAuth = create(
       },
 
       checkAuth: async () => {
-        const { isAuthenticated, currentUser } = get();
-        if (isAuthenticated && currentUser) {
-          return; // preserve existing successful login state
-        }
-
         try {
           set({ loading: true });
           const res = await axios.get(`${BASE_URL}/common-api/me`, { withCredentials: true });

@@ -10,27 +10,10 @@ function RootLayout() {
     (state) => state.checkAuth
   );
 
-  const isAuthenticated = useAuth(
-    (state) => state.isAuthenticated
-  );
-
-  const currentUser = useAuth(
-    (state) => state.currentUser
-  );
-
-  // Check Authentication
+  // Check Authentication on mount
   useEffect(() => {
-    if (
-      !isAuthenticated ||
-      !currentUser
-    ) {
-      checkAuth();
-    }
-  }, [
-    checkAuth,
-    isAuthenticated,
-    currentUser,
-  ]);
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#1a120b] text-[#f5deb3] overflow-x-hidden">
