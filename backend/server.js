@@ -12,8 +12,32 @@ config(); //process.env
 
 //Create express application
 const app = exp();
-//use cors middleware
-app.use(cors({ origin: "https://blogappcapstoneatp.vercel.app", credentials:true }));
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "https://blogappcapstoneatp.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://localhost:5177",
+  "http://localhost:5178",
+  "http://localhost:5179",
+  "http://localhost:5180",
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
