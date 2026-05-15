@@ -12,10 +12,10 @@ config(); //process.env
 
 //Create express application
 const app = exp();
-
+app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: true,
+    origin: "https://blogappcapstoneatp.vercel.app",
     credentials: true,
   })
 );

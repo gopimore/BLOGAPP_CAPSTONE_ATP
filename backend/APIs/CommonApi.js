@@ -7,20 +7,35 @@ export const commonRouter = exp.Router();
 
 //login
 commonRouter.post("/login", async (req, res) => {
-  //get user cred object
-  let userCred = req.body;
-  //call authenticate service
-  let { token, user } = await authenticate(userCred);
-  //save token as httpOnly cookie
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
-  //send res
-  res.status(200).json({ message: "login success", payload: user });
-});
+  try {
 
+    //get user cred object
+    let userCred = req.body;
+
+    //call authenticate service
+    let { token, user } = await authenticate(userCred);
+
+    //save token as httpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    //send res
+    res.status(200).json({
+      message: "login success",
+      payload: user,
+    });
+
+  } catch (err) {
+    res.status(401).json({
+      message: "Login failed",
+      error: err.message,
+    });
+  }
+});
 //get current user
 commonRouter.get("/me", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res) => {
   const user = await UserTypeModel.findById(req.user.userId).select("-password");
@@ -29,14 +44,16 @@ commonRouter.get("/me", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res)
 
 //logout for User, Author and Admin
 commonRouter.get("/logout", (req, res) => {
-  // Clear the cookie named 'token'
+
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: true,
+    sameSite: "None",
   });
 
-  res.status(200).json({ message: "Logged out successfully" });
+  res.status(200).json({
+    message: "Logged out successfully",
+  });
 });
 
 //Change password(Protected route)
