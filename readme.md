@@ -136,9 +136,5 @@ autocannon -c 100 -d 20 http://localhost:5000/api/articles
 - **Frontend entry**: [frontend/src/main.jsx](frontend/src/main.jsx)
 - **Frontend components**: [frontend/src/components](frontend/src/components)
 
----
-If you'd like, I can:
-- add the request-timing middleware to `backend` now,
-- create a sample `k6` test script for main user flows, or
-- add a simple `autocannon` npm script to `backend/package.json`.
+
 
